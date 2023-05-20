@@ -1,0 +1,13 @@
+*{
+    font-family: 'Dancing Script', cursive;
+font-family: 'Hind Siliguri', sans-serif;
+margin: 0;
+}
+.hide {
+    display: none;
+  }
+
+  .cart:hover + .hide {
+    display: block;
+    color: red;
+  }
