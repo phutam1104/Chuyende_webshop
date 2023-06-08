@@ -36,68 +36,126 @@
                         <span>({{ count($product->productComment) }})</span>
                         <p>{{ $product->content }}</p>
                         @if ($product->discount != null)
-                            <h4>  @php
-                                echo number_format($product->discount, 0, '', ','); 
+                            <h4> @php
+                                echo number_format($product->discount, 0, '', ',');
                             @endphp
-                            VND
-                            <del>
-                             @php
-                                echo number_format($product->price, 0, '', ','); 
-                            @endphp
-                            
-                         </del></h4>
+                                VND
+                                <del>
+                                    @php
+                                        echo number_format($product->price, 0, '', ',');
+                                    @endphp
+
+                                </del>
+                            </h4>
                         @else
-                            <h4>  @php
-                                echo number_format($product->price, 0, '', ','); 
-                          @endphp</h4>
+                            <h4> @php
+                                echo number_format($product->price, 0, '', ',');
+                            @endphp</h4>
                         @endif
                         <div></div>
                     </div>
-                    <div class="flex flex-col mt-2">
-                        <div class="flex flex-col px-10">
-                            <div class="flex">
-                                @foreach (array_unique(array_column($product->productDetail->toArray(), 'color')) as $productColors)
-                                    <div class="cc-item m-2">
-                                        <input type="radio" id="cc-{{ $productColors }}"value="cc-{{ $productColors }}"
-                                            class="hidden peer" required>
-                                        <label for="cc-{{ $productColors }}"
-                                            class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 ">
-                                            <div class="block">
-                                                <div class="w-full text-lg font-semibold">{{ $productColors }}</div>
-                                            </div>
-                                        </label>
-                                    </div>
-                                @endforeach
-                                </>
+                    <form action="" method="post">                        
+                        @csrf
+                        @include('components.notification')
+                        <div class="flex flex-col mt-2">
+                            <div class="flex flex-col px-10">
+                                {{-- <div class="flex">
+                                    @foreach ($productDetails as $productDetail)
+                                        <input type="radio" id="{{ $productDetail->id }}" name="productDetail_id" class="productDetail_id" value="{{ $productDetail->id }}">
+                                        <label for="{{ $productDetail->id }}">{{ $productDetail->id }}</label>
+                                        <div class="c-item m-2 ">
+                                            <input type="radio" 
+                                                value="{{ $productDetail->id }}" class="hidden peer" >
+                                            <label for="{{ $productDetail->id }}"
+                                                class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 ">
+                                                <div class="block">
+                                                    <div class="w-full text-xl font-semibold">-{{ $productDetail->size }}-{{ $productDetail->color }}
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div> --}}
+                                <div class="flex">
+                                   
+                                    <input type="hidden" name="productDetail" value="productDetail">
+                                    <input type="hidden" name="product" value="{{ $product->id }}">
 
-                            </div>
-                            <div class="flex mt-5">
-                                @foreach (array_unique(array_column($product->productDetail->toArray(), 'size')) as $productSize)
+                                    {{-- @foreach (array_unique(array_column($product->productDetail->toArray(), 'color')) as $productColors) --}}
+                                    @foreach (array_unique(array_column($product->productDetail->toArray(), 'color')) as $productColors)
+
+                                        <div class="cc-item m-2">
+                                            <input type="radio" id="cc-{{ $productColors }}"value="{{ $productColors }}"
+                                                class="hidden peer" name="productDetailColor">
+                                            <label for="cc-{{ $productColors }}"
+                                                class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 ">
+                                                <div class="block">
+                                                    <div class="w-full text-lg font-semibold">{{ $productColors }}</div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    @endforeach
+
+                                </div>
+                                <div class="flex mt-5">
+                                    
+                                    @foreach (array_unique(array_column($product->productDetail->toArray(), 'size')) as $productSize)
+                                        
                                     <div class="c-item m-2 ">
-                                        <input type="radio" id="sm-{{ $productSize }}"value="sm-{{ $productSize }}"
-                                            class="hidden peer" required>
-                                        <label for="sm-{{ $productSize }}"
-                                            class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 ">
-                                            <div class="block">
-                                                <div class="w-full text-lg font-semibold">{{ $productSize }}</div>
-                                            </div>
-                                        </label>
-                                    </div>
-                                @endforeach
+                                            <input type="radio" id="sm-{{ $productSize }}"value="{{ $productSize }}"
+                                                class="hidden peer" name="productDetailSize">
+                                            <label for="sm-{{ $productSize }}"
+                                                class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 ">
+                                                <div class="block">
+                                                    <div class="w-full text-lg font-semibold">{{ $productSize }}</div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                {{-- <div class="flex mt-5">
+                                    @foreach (array_unique(array_column($product->productDetail->toArray(), 'size')) as $productSize)
+                                        <div class="c-item m-2 ">
+                                            = <input type="radio" id="sm-{{ $productSize }}"
+                                                value="sm-{{ $productSize }}" class="hidden peer" required>
+                                            <label for="sm-{{ $productSize }}"
+                                                class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 ">
+                                                <div class="block">
+                                                    <div class="w-full text-lg font-semibold">{{ $productSize }}</div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div> --}}
                             </div>
-                        </div>
-                        <div>
-                            <ul>
-                                <li><span>CATEGORIES: </span> {{ $product->productCategory->name }}</li>
-                                <li><span>TAGS: </span>{{ $product->tag }}</li>
-                                <li><span>SKU: </span>{{ $product->sku }}</li>
-                                <li><span>Mô tả sản phầm: </span> {!! $product->description !!}</li>
-                                <li class="mt-5"><span href="javascript:addCart({{ $product->id }})" class="p-3 bg-orange-500">Thêm vào
-                                        giỏ hàng </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                            <div>
+                                <ul>
+                                   
+                                    <li><span>CATEGORIES: </span> {{ $product->productCategory->name }}</li>
+                                    <li><span>TAGS: </span>{{ $product->tag }}</li>
+                                    <li><span>SKU: </span>{{ $product->sku }}</li>
+                                    <li><span>Mô tả sản phầm: </span> {!! $product->description !!}</li>
+                                    {{-- <li class="mt-5"><span href="cart/add/{{ $product->id }}"
+                                            class="p-3 bg-orange-500">
+                                            Thêm
+                                            vào
+                                            giỏ hàng
+                                         </a>
+                                    </li> --}}
+                                    <li>
+                                        
+                                    </li>
+                                </ul>
+                                {{-- <input type="submit" value="Thêm
+                                        vào
+                                        giỏ hàng"> --}}
+                            </div>
+                        </div>  
+                        {{-- <button type="submit" class="p-3 bg-orange-500">Send message</button> --}}
+                     {{-- <a href="../../cart/add/@if (session('idDetail')){{ session('idDetail') }}@endif"><button type="submit" class="p-3 bg-orange-500">Send message</button> </a>   --}}
+                            <button type="submit" class="p-3 bg-orange-500">Send message</button>
+
+                    </form>
                 </div>
                 <div>
 
